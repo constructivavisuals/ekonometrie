@@ -282,7 +282,7 @@ a{color:var(--orange-d)}
   html,body{overflow-x:hidden;max-width:100%}
   .app{flex-direction:column}
   /* horní lišta na plnou šířku: brand + nástroje v řádku, navigace pod tím */
-  .rail{position:static;height:auto;width:100%;max-width:100%;flex:none;flex-direction:column;align-items:stretch;gap:10px;padding:10px 14px;overflow:hidden;background-position:0 0}
+  .rail{position:static;height:auto;width:100%;max-width:100%;flex:none;flex-direction:column;align-items:stretch;gap:10px;padding:calc(10px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right)) 10px calc(14px + env(safe-area-inset-left));overflow:hidden;background-position:0 0}
   .brand{padding:0;width:100%;align-items:center;gap:11px}
   .brand h1{font-size:15px}
   .brand .sub{display:none}

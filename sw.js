@@ -1,8 +1,8 @@
 /* Ekonometrie — service worker
    Navigace (HTML): network-first → online vždy nejnovější verze, offline padne na cache.
    Data soubory, ikony, KaTeX (CDN JS/CSS/fonty): cache-first.
-   Verzovaná cache: při novém nasazení zvedni číslo (ekonometrie-v5 → ekonometrie-v6). */
-const CACHE = "ekonometrie-v5";
+   Verzovaná cache: při novém nasazení zvedni číslo (ekonometrie-v6 → ekonometrie-v7). */
+const CACHE = "ekonometrie-v6";
 const ASSETS = [
   "/",
   "/index.html",
