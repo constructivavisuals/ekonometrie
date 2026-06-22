@@ -1,8 +1,8 @@
 /* Ekonometrie — service worker
    Navigace (HTML): network-first → online vždy nejnovější verze, offline padne na cache.
    Data soubory, ikony, KaTeX (CDN JS/CSS/fonty): cache-first.
-   Verzovaná cache: při novém nasazení zvedni číslo (ekonometrie-v1 → ekonometrie-v2). */
-const CACHE = "ekonometrie-v1";
+   Verzovaná cache: při novém nasazení zvedni číslo (ekonometrie-v2 → ekonometrie-v3). */
+const CACHE = "ekonometrie-v2";
 const ASSETS = [
   "/",
   "/index.html",
@@ -11,7 +11,7 @@ const ASSETS = [
   "/icon-512.png",
   "/icon-512-maskable.png",
   "/ekonometrie-teorie.js",
-  "/ekonometrie-priklady.js"
+  "/ekonometrie-priklady-2.js"
 ];
 /* KaTeX z CDN — předcachuj nejlépe jak to jde (offline rendering vzorců).
    Fonty KaTeX se doplní za běhu (cache-first níže) při prvním online načtení. */
