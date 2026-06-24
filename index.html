@@ -246,15 +246,16 @@ a{color:var(--orange-d)}
 .hintbox>summary:hover{color:var(--amber-d,var(--amber))}
 .hintbox[open]>summary{border-bottom:1px dashed var(--amber-line)}
 /* --- Teorie 100 — flip kartičky --- */
-.t100{max-width:760px;margin:0 auto}
+.t100{max-width:720px;margin:0 auto}
 .t100-head{margin-bottom:18px}
-.flip{perspective:1800px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.flip{perspective:1800px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  width:-moz-fit-content;width:fit-content;max-width:100%;min-width:min(320px,100%);margin:0 auto}
 .flip-in{position:relative;display:grid;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,.18,.2,1)}
 .flip.flipped .flip-in{transform:rotateY(180deg)}
 .flip-face{grid-area:1/1;-webkit-backface-visibility:hidden;backface-visibility:hidden;
-  display:flex;flex-direction:column;justify-content:center;min-height:340px;
+  display:flex;flex-direction:column;justify-content:center;min-height:180px;
   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-  padding:30px 30px 22px;box-shadow:var(--shadow-lg)}
+  padding:26px 30px 22px;box-shadow:var(--shadow-lg)}
 .flip:hover .flip-face{border-color:var(--orange-line)}
 .flip-back{transform:rotateY(180deg);background:var(--surface-2);border-color:var(--orange-line)}
 .flip-tag{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;text-transform:uppercase;
