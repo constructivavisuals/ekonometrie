@@ -245,6 +245,33 @@ a{color:var(--orange-d)}
 .hintbox[open]>summary::after{transform:rotate(180deg)}
 .hintbox>summary:hover{color:var(--amber-d,var(--amber))}
 .hintbox[open]>summary{border-bottom:1px dashed var(--amber-line)}
+/* --- Teorie 100 — flip kartičky --- */
+.t100{max-width:760px;margin:0 auto}
+.t100-head{margin-bottom:18px}
+.flip{perspective:1800px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.flip-in{position:relative;display:grid;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,.18,.2,1)}
+.flip.flipped .flip-in{transform:rotateY(180deg)}
+.flip-face{grid-area:1/1;-webkit-backface-visibility:hidden;backface-visibility:hidden;
+  display:flex;flex-direction:column;justify-content:center;min-height:340px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:30px 30px 22px;box-shadow:var(--shadow-lg)}
+.flip:hover .flip-face{border-color:var(--orange-line)}
+.flip-back{transform:rotateY(180deg);background:var(--surface-2);border-color:var(--orange-line)}
+.flip-tag{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--orange-d);margin-bottom:14px}
+.flip-back .flip-tag{color:var(--green-d)}
+.flip-q{font-size:19px;line-height:1.5;color:var(--ink);font-weight:600}
+.flip-a{font-size:15.5px;line-height:1.62;color:var(--ink)}
+.flip-a b{color:var(--ink)}
+.flip-hint{margin-top:18px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.04em;color:var(--ink-3)}
+.t100-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px}
+.t100-count{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;color:var(--ink-2);letter-spacing:.04em}
+.btn[disabled]{opacity:.4;cursor:default;pointer-events:none}
+@media(max-width:560px){
+  .flip-face{min-height:300px;padding:24px 20px 18px}
+  .flip-q{font-size:17px}
+  .t100-nav .btn{flex:1}
+}
 .hintbox .hintbody{padding:11px 13px;font-size:13.5px;line-height:1.58;color:var(--ink-2)}
 
 .tflist{display:flex;flex-direction:column;gap:10px;margin-top:2px}
@@ -539,6 +566,7 @@ a{color:var(--orange-d)}
       <section class="screen on" id="s-plan"></section>
       <section class="screen" id="s-okruhy"></section>
       <section class="screen" id="s-ucit"></section>
+      <section class="screen" id="s-t100"></section>
       <section class="screen" id="s-prehled"></section>
     </div>
   </main>
@@ -555,6 +583,7 @@ a{color:var(--orange-d)}
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 <script src="/ekonometrie-teorie.js"></script>
 <script src="/ekonometrie-priklady-2.js"></script>
+<script src="/ekonometrie-teorie100.js"></script>
 <script>
 /* ============================================================
    ENGINE — Ekonometrie (teorie ANO/NE + výběr a/b/c/d + příklady)
@@ -816,7 +845,8 @@ const SECTIONS=[
  {id:"plan",grp:"start",label:"Dnešek",sh:"1",ic:'<path d="M3 12 12 3l9 9M5 10v10h14V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'},
  {id:"okruhy",grp:"uc",label:"Okruhy",sh:"2",ic:'<path d="M4 5h16M4 12h16M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'},
  {id:"ucit",grp:"uc",label:"Učení",sh:"3",ic:'<path d="M12 3 2 8l10 5 10-5-10-5ZM6 10.5V16c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'},
- {id:"prehled",grp:"konec",label:"Přehled",sh:"4",ic:'<path d="M4 19V5m5 14V9m5 10V12m5 7V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'}
+ {id:"t100",grp:"uc",label:"Teorie 100 otázek",sh:"4",ic:'<path d="M5 4h11l3 3v13H5zM16 4v3h3M8 12h8M8 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'},
+ {id:"prehled",grp:"konec",label:"Přehled",sh:"5",ic:'<path d="M4 19V5m5 14V9m5 10V12m5 7V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'}
 ];
 function buildNav(){
   const grpLabel={start:"Start",uc:"Učení & procvičování",konec:"Pokrok"};
@@ -839,7 +869,54 @@ function show(id){
   if(id==="plan")renderPlan();
   else if(id==="okruhy")okruhyGrid();
   else if(id==="ucit")learnModes();
+  else if(id==="t100")t100Render();
   else if(id==="prehled")prehledRender();
+}
+
+/* ============================================================
+   TEORIE 100 — kartičky (klikni = otočit, předchozí / další)
+============================================================ */
+let T100_I=0;
+function t100Render(){
+  const total=TEORIE100.length;
+  if(T100_I<0)T100_I=0;
+  if(T100_I>=total)T100_I=total-1;
+  const c=TEORIE100[T100_I];
+  const html=`
+   <div class="t100">
+     <div class="t100-head">
+       <p class="eyebrow">Teoretické otázky</p>
+       <h2 class="h-title">Teorie 100 otázek</h2>
+       <p class="lede">Klikni na kartičku — otočí se a ukáže odpověď. Procházej tlačítky nebo šipkami ← / →.</p>
+     </div>
+     <div class="flip" id="flipCard" onclick="t100Flip()">
+       <div class="flip-in">
+         <div class="flip-face flip-front">
+           <span class="flip-tag">Otázka ${T100_I+1}</span>
+           <div class="flip-q">${c.q}</div>
+           <span class="flip-hint">Klikni pro odpověď ↻</span>
+         </div>
+         <div class="flip-face flip-back">
+           <span class="flip-tag">Odpověď</span>
+           <div class="flip-a">${c.a}</div>
+           <span class="flip-hint">Klikni pro otázku ↻</span>
+         </div>
+       </div>
+     </div>
+     <div class="t100-nav">
+       <button class="btn ghost" onclick="event.stopPropagation();t100Go(-1)" ${T100_I===0?"disabled":""}>← Předchozí</button>
+       <span class="t100-count">${T100_I+1} / ${total}</span>
+       <button class="btn orange" onclick="event.stopPropagation();t100Go(1)" ${T100_I===total-1?"disabled":""}>Další →</button>
+     </div>
+   </div>`;
+  setHTML(byId("s-t100"),html);
+}
+function t100Flip(){const el=byId("flipCard");if(el)el.classList.toggle("flipped");}
+function t100Go(d){
+  const total=TEORIE100.length;
+  T100_I=Math.min(total-1,Math.max(0,T100_I+d));
+  t100Render();
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 /* ============================================================
@@ -1113,6 +1190,12 @@ function achSection(){
 ============================================================ */
 function onKey(e){
   if(e.key==="Escape"){toggleHelp(false);return;}
+  if(CUR==="t100"){
+    if(e.key==="ArrowRight"){t100Go(1);return;}
+    if(e.key==="ArrowLeft"){t100Go(-1);return;}
+    if(e.key===" "||e.key==="Enter"){e.preventDefault();t100Flip();return;}
+    return;
+  }
   if(!LR||!LR.active||CUR!=="ucit")return;
   const it=CARD_REG[LR.cur],card=byId("card-"+LR.cur);
   if(card&&card.dataset.done){

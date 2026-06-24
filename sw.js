@@ -2,7 +2,7 @@
    Navigace (HTML): network-first → online vždy nejnovější verze, offline padne na cache.
    Data soubory, ikony, KaTeX (CDN JS/CSS/fonty): cache-first.
    Verzovaná cache: při novém nasazení zvedni číslo (ekonometrie-v6 → ekonometrie-v7). */
-const CACHE = "ekonometrie-v6";
+const CACHE = "ekonometrie-v7";
 const ASSETS = [
   "/",
   "/index.html",
@@ -11,7 +11,8 @@ const ASSETS = [
   "/icon-512.png",
   "/icon-512-maskable.png",
   "/ekonometrie-teorie.js",
-  "/ekonometrie-priklady-2.js"
+  "/ekonometrie-priklady-2.js",
+  "/ekonometrie-teorie100.js"
 ];
 /* KaTeX z CDN — předcachuj nejlépe jak to jde (offline rendering vzorců).
    Fonty KaTeX se doplní za běhu (cache-first níže) při prvním online načtení. */
